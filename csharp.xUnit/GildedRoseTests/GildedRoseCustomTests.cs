@@ -38,4 +38,15 @@ public class GildedRoseCustomTests
 
         Assert.Equal(11, items[0].Quality);
     }
+
+    // The Quality of an item is never more than 50
+    [Fact]
+    public void Test4()
+    {
+        Item[] items = { new Item { Name = "Aged Brie", SellIn = 10, Quality = 50 } };
+        GildedRose app = new GildedRose(items);
+        app.UpdateQuality();
+
+        Assert.Equal(50, items[0].Quality);
+    }
 }
