@@ -8,6 +8,9 @@ public class GildedRose
     private const string BackstagePasses = "Backstage passes to a TAFKAL80ETC concert";
     private const string Sulfuras = "Sulfuras, Hand of Ragnaros";
 
+    private const int MinQuality = 0;
+    private const int MaxQuality = 50;
+
     IList<Item> Items;
 
     public GildedRose(IList<Item> Items)
@@ -25,74 +28,80 @@ public class GildedRose
 
     private static void UpdateItem(Item item)
     {
-        if (item.Name != AgedBrie && item.Name != BackstagePasses)
+        switch (item.Name)
         {
-            if (item.Quality > 0)
-            {
-                if (item.Name != Sulfuras)
-                {
-                    item.Quality = item.Quality - 1;
-                }
-            }
+            case Sulfuras:
+                // Legendary item: never changes.
+                break;
+            case AgedBrie:
+                UpdateAgedBrie(item);
+                break;
+            case BackstagePasses:
+                UpdateBackstagePasses(item);
+                break;
+            default:
+                UpdateNormalItem(item);
+                break;
         }
-        else
-        {
-            if (item.Quality < 50)
-            {
-                item.Quality = item.Quality + 1;
+    }
 
-                if (item.Name == BackstagePasses)
-                {
-                    if (item.SellIn < 11)
-                    {
-                        if (item.Quality < 50)
-                        {
-                            item.Quality = item.Quality + 1;
-                        }
-                    }
-
-                    if (item.SellIn < 6)
-                    {
-                        if (item.Quality < 50)
-                        {
-                            item.Quality = item.Quality + 1;
-                        }
-                    }
-                }
-            }
-        }
-
-        if (item.Name != Sulfuras)
-        {
-            item.SellIn = item.SellIn - 1;
-        }
+    private static void UpdateNormalItem(Item item)
+    {
+        DecreaseQuality(item);
+        item.SellIn--;
 
         if (item.SellIn < 0)
         {
-            if (item.Name != AgedBrie)
-            {
-                if (item.Name != BackstagePasses)
-                {
-                    if (item.Quality > 0)
-                    {
-                        if (item.Name != Sulfuras)
-                        {
-                            item.Quality = item.Quality - 1;
-                        }
-                    }
-                }
-                else
-                {
-                    item.Quality = item.Quality - item.Quality;
-                }
-            }
-            else
-            {
-                if (item.Quality < 50)
-                {
-                    item.Quality = item.Quality + 1;
-                }
-            }
+            DecreaseQuality(item);
+        }
+    }
+
+    private static void UpdateAgedBrie(Item item)
+    {
+        IncreaseQuality(item);
+        item.SellIn--;
+
+        if (item.SellIn < 0)
+        {
+            IncreaseQuality(item);
+        }
+    }
+
+    private static void UpdateBackstagePasses(Item item)
+    {
+        IncreaseQuality(item);
+
+        if (item.SellIn < 11)
+        {
+            IncreaseQuality(item);
+        }
+
+        if (item.SellIn < 6)
+        {
+            IncreaseQuality(item);
+        }
+
+        item.SellIn--;
+
+        if (item.SellIn < 0)
+        {
+            item.Quality = MinQuality;
+        }
+    }
+
+    private static void IncreaseQuality(Item item)
+    {
+        if (item.Quality < MaxQuality)
+        {
+            item.Quality++;
+        }
+    }
+
+    private static void DecreaseQuality(Item item)
+    {
+        if (item.Quality > MinQuality)
+        {
+            item.Quality--;
         }
     }
 }
