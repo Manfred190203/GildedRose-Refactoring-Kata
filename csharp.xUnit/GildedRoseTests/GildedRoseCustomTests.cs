@@ -61,4 +61,15 @@ public class GildedRoseCustomTests
         Assert.Equal(10, items[0].SellIn);
         Assert.Equal(50, items[0].Quality);
     }
+
+    // Backstage passes, like aged brie, increases in Quality as it's SellIn value approaches; Quality increases by 2 when there are 10 days or less
+    [Fact]
+    public void Test6()
+    {
+        Item[] items = { new Item { Name = "Backstage passes to a TAFKAL80ETC concert", SellIn = 4, Quality = 40 } };
+        GildedRose app = new GildedRose(items);
+        app.UpdateQuality();
+
+        Assert.Equal(43, items[0].Quality);
+    }
 }
