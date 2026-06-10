@@ -27,4 +27,15 @@ public class GildedRoseCustomTests
 
         Assert.Equal(0, items[0].Quality);
     }
+
+    // Aged Brie actually increases in Quality the older it gets
+    [Fact]
+    public void Test3()
+    {
+        Item[] items = { new Item { Name = "Aged Brie", SellIn = 10, Quality = 10 } };
+        GildedRose app = new GildedRose(items);
+        app.UpdateQuality();
+
+        Assert.Equal(11, items[0].Quality);
+    }
 }
