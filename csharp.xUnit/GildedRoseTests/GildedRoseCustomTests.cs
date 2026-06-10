@@ -16,4 +16,15 @@ public class GildedRoseCustomTests
         Assert.Equal(98, items[0].Quality);
         Assert.Equal(98, items[0].Quality);
     }
+
+    // Quality should never be negative
+    [Fact]
+    public void Test2()
+    {
+        Item[] items = { new Item { Name = "Avocado", SellIn = 0, Quality = 0 } };
+        GildedRose app = new GildedRose(items);
+        app.UpdateQuality();
+
+        Assert.Equal(0, items[0].Quality);
+    }
 }
