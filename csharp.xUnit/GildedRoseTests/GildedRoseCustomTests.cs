@@ -84,4 +84,15 @@ public class GildedRoseCustomTests
 
         Assert.Equal(0, items[0].Quality);
     }
+
+    // Conjured items degrade in Quality twice as fast as normal items
+    [Fact]
+    public void Test8()
+    {
+        Item[] items = { new Item { Name = "Conjured Avocado", SellIn = 10, Quality = 40 } };
+        GildedRose app = new GildedRose(items);
+        app.UpdateQuality();
+
+        Assert.Equal(38, items[0].Quality);
+    }
 }
