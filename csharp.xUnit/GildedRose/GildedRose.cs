@@ -1,3 +1,5 @@
+using System;
+using System;
 using System.Collections.Generic;
 
 namespace GildedRoseKata;
@@ -7,6 +9,7 @@ public class GildedRose
     private const string AgedBrie = "Aged Brie";
     private const string BackstagePasses = "Backstage passes to a TAFKAL80ETC concert";
     private const string Sulfuras = "Sulfuras, Hand of Ragnaros";
+    private const string ConjuredPrefix = "Conjured";
 
     private const int MinQuality = 0;
     private const int MaxQuality = 50;
@@ -40,7 +43,14 @@ public class GildedRose
                 UpdateBackstagePasses(item);
                 break;
             default:
-                UpdateNormalItem(item);
+                if (item.Name.StartsWith(ConjuredPrefix, StringComparison.OrdinalIgnoreCase))
+                {
+                    UpdateConjuredItem(item);
+                }
+                else
+                {
+                    UpdateNormalItem(item);
+                }
                 break;
         }
     }
@@ -52,6 +62,19 @@ public class GildedRose
 
         if (item.SellIn < 0)
         {
+            DecreaseQuality(item);
+        }
+    }
+
+    private static void UpdateConjuredItem(Item item)
+    {
+        DecreaseQuality(item);
+        DecreaseQuality(item);
+        item.SellIn--;
+
+        if (item.SellIn < 0)
+        {
+            DecreaseQuality(item);
             DecreaseQuality(item);
         }
     }
